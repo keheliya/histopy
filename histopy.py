@@ -4,12 +4,7 @@
 from BeautifulSoup import BeautifulSoup as BSoup
 import urllib2
 import re
-import datetime
-import unicodedata
 
-# soup = {}
-# now = datetime.datetime.now()
-# today = now.strftime("%B_%d")
 
 _opener = urllib2.build_opener()
 _opener.addheaders = [('User-agent', 'Mozilla/5.0')]
@@ -37,10 +32,6 @@ def _load_ul(li, soup):
                 year = line[0].strip()
                 event = line[1].strip()
                 item_dict[year] = event
-                # events_dict[year] = event.decode('utf-8')
-                # nText = unicodedata.normalize( "NFKD", events_dict[year] )
-                # print nText
-                # print events_dict[year]
         except:
             pass
     return item_dict

@@ -14,10 +14,11 @@ import unicodedata
 _opener = urllib2.build_opener()
 _opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 
- 
+
 def _remove_html_tags(html):
     p = re.compile(r'<[^<]*?/?>')
     return p.sub('', html)
+
 
 def load_history(someday):
     formatted_date = someday.strftime("%B_%d")
@@ -25,12 +26,13 @@ def load_history(someday):
     history = BSoup(html)
     return history
 
-def _load_ul(li,soup):
+
+def _load_ul(li, soup):
     item_dict = {}
     for li in soup.html.body.findAll('ul')[li]:
-        s = _remove_html_tags(str(li))        
+        s = _remove_html_tags(str(li))
         try:
-            if int(s[0]) > 0:                
+            if int(s[0]) > 0:
                 line = s.split('\xe2\x80\x93')
                 year = line[0].strip()
                 event = line[1].strip()
@@ -38,18 +40,19 @@ def _load_ul(li,soup):
                 # events_dict[year] = event.decode('utf-8')
                 # nText = unicodedata.normalize( "NFKD", events_dict[year] )
                 # print nText
-                # print events_dict[year]                
+                # print events_dict[year]
         except:
             pass
     return item_dict
 
 
-
 def load_events(loaded_history):
-    return _load_ul(1,loaded_history)
+    return _load_ul(1, loaded_history)
+
 
 def load_births(loaded_history):
-    return _load_ul(2,loaded_history)
+    return _load_ul(2, loaded_history)
+
 
 def load_deaths(loaded_history):
-    return _load_ul(3,loaded_history)
+    return _load_ul(3, loaded_history)

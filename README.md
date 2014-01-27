@@ -15,7 +15,7 @@ This work was inspired by following sources
 * Really Simple History API [git hub repo](https://github.com/muffinista/really-simple-history-api)
 * 2of1's blog [post](http://blog.2of1.org/2010/11/14/pulling-on-this-day-in-history-data-from-wikipedia/).
 
-### Powered by
+### Powered by HistoPy
 
 [DateKeeper Pro](http://datekeeper.herokuapp.com/) iPhone app uses HistoPy to make the "History Book" feature.
 

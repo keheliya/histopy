@@ -28,7 +28,7 @@ def _filter(input):
     return {k:v for (k,v) in input.iteritems() if _to_int(k) % 5 == 0 or _to_int(k) % 10 == 0}
 
 def _map(input, month, day):
-    return {str(day) + ' ' + calendar.month_name[month] + ' ' + key: value for key, value in input.items()}
+    return {'{num:02d}'.format(num=day) + ' ' + calendar.month_name[month] + ' ' + key: value for key, value in input.items()}
 
 parser = argparse.ArgumentParser(description='Fetch events from Wikipedia for years ending in 0 and 5 for the given month.')
 parser.add_argument('--month', dest='month', type=int, default=1)

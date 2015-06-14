@@ -58,15 +58,15 @@ for day in range(1, days_in_month):
 if not os.path.exists('./output'):
     os.makedirs('./output')
 
-f = open('output/' + calendar.month_name[month] + 'events.json', 'w')
+f = open('output/' + calendar.month_name[month] + '_events.json', 'w')
 json.dump(collections.OrderedDict(sorted(all_events.items())), f)
 print 'Found {} events for month of {}'.format(len(all_events), calendar.month_name[month])
 
-f = open('output/' + calendar.month_name[month] + 'deaths.json', 'w')
+f = open('output/' + calendar.month_name[month] + '_deaths.json', 'w')
 json.dump(collections.OrderedDict(sorted(all_deaths.items())), f)
 print 'Found {} deaths for month of {}'.format(len(all_deaths), calendar.month_name[month])
 
-f = open('output/' + calendar.month_name[month] + 'births.json', 'w')
+f = open('output/' + calendar.month_name[month] + '_births.json', 'w')
 json.dump(collections.OrderedDict(sorted(all_births.items())), f)
 print 'Found {} births for month of {}'.format(len(all_births), calendar.month_name[month])
 

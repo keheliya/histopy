@@ -6,13 +6,16 @@ import urllib2
 import re
 import pickle
 import logging
+import ssl
 
+if hasattr(ssl, '_create_unverified_context'):
+    ssl._create_default_https_context = ssl._create_unverified_context
 
 _opener = urllib2.build_opener()
 _opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 _events_calendar = {}
 _events_list_file = 'events.data'
-_url = 'http://en.wikipedia.org/wiki/'
+_url = 'https://en.wikipedia.org/wiki/'
 logging.basicConfig(
     filename='log_histopy.txt', level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s'

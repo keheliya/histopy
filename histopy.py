@@ -1,8 +1,7 @@
-#!/usr/bin/env python2.6
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 
-from BeautifulSoup import BeautifulSoup as BSoup
-import urllib2
+from bs4 import BeautifulSoup
+import urllib.request as urllib2
 import re
 import pickle
 import logging
@@ -22,11 +21,11 @@ logging.basicConfig(
 )
 
 try:
-    with open(_events_list_file) as f:
+    with open(_events_list_file, 'rb') as f:
         _events_calendar = pickle.load(f)
 except IOError as e:
     logging.debug(
-        'Cache file does not exist. Creating new file as: '+_events_list_file
+        'Cache file does not exist. Creating new file as: ' + _events_list_file
     )
     pickle.dump(_events_calendar, open(_events_list_file, 'wb'))
 
@@ -38,48 +37,42 @@ def _remove_html_tags(html):
 
 def load_history(someday, caching=True):
     formatted_date = someday.strftime("%B_%d")
-    if (caching):
+    if caching:
         try:
-            with open(_events_list_file) as f:
+            with open(_events_list_file, 'rb') as f:
                 _events_calendar = pickle.load(f)
         except IOError as e:
-            logging.Error('File I/O Error occured: '+e)
+            logging.Error('File I/O Error occured: ' + e)
 
         if formatted_date in _events_calendar:
             logging.debug(formatted_date + ' exists in calendar')
             html = _events_calendar[formatted_date]
         else:
-            html = _opener.open(_url+formatted_date).read()
+            html = _opener.open(_url + formatted_date).read().decode('utf-8', 'ignore').encode('ascii', 'ignore')
             _events_calendar[formatted_date] = html
             pickle.dump(_events_calendar, open(_events_list_file, 'wb'))
     else:
-        html = _opener.open(url+formatted_date).read()
-    text = BSoup(html).html.body.findAll('ul')
-    return text
+        html = _opener.open(_url + formatted_date).read().decode('utf-8', 'ignore').encode('ascii', 'ignore')
+    uls = BeautifulSoup(html, "html.parser").html.body.findAll('ul')
+    result = {}
 
-
-def _load_ul(li, text):
-    item_dict = {}
-    for li in text[li]:
-        s = _remove_html_tags(str(li))
-        try:
-            if int(s[0]) > 0:
-                line = s.split('\xe2\x80\x93')
-                year = line[0].strip()
-                event = line[1].strip()
-                item_dict[year] = event
-        except:
-            pass
-    return item_dict
+    for i in [1, 2, 3]:
+        item_dict = {}
+        for li in uls[i].findAll('li'):
+            res = li.text.split(" ", 1)
+            item_dict[str(res[0].strip().encode('utf-8').decode("utf-8"))] = str(
+                res[1].strip().encode('utf-8').decode("utf-8"))
+        result[i] = item_dict
+    return result
 
 
 def load_events(loaded_history):
-    return _load_ul(1, loaded_history)
+    return loaded_history[1]
 
 
 def load_births(loaded_history):
-    return _load_ul(2, loaded_history)
+    return loaded_history[2]
 
 
 def load_deaths(loaded_history):
-    return _load_ul(3, loaded_history)
+    return loaded_history[3]

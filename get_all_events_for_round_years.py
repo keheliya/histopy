@@ -1,31 +1,33 @@
-#!/usr/bin/env python2.6
 # encoding: utf-8
 
 import histopy
 import datetime
-import random
 import json
 import calendar
 import re
 import collections
 import os
-import sys
 import argparse
 
+
 def _to_int(input):
+    if len(input)==0:
+        return False
     bc = re.compile(' BC\Z')
     bce = re.compile(' BCE\Z')
     slash = re.compile('/')
-    if (bc.search(input)):
+    if bc.search(input):
         return int(input[0:-3])
-    if (bce.search(input)):
+    if bce.search(input):
         return int(input[0:-4])
-    if (slash.search(input)):
+    if slash.search(input):
         return int(input.split('/')[0])
     return int(input)
 
+
 def _filter(input):
-    return {k:v for (k,v) in input.iteritems() if _to_int(k) % 5 == 0 or _to_int(k) % 10 == 0}
+    return {k:v for (k,v) in input.items() if _to_int(k) % 5 == 0 or _to_int(k) % 10 == 0}
+
 
 def _map(input, month, day):
     return {'{num:02d}'.format(num=day) + ' ' + calendar.month_name[month] + ' ' + key: value for key, value in input.items()}
@@ -60,13 +62,13 @@ if not os.path.exists('./output'):
 
 f = open('output/' + calendar.month_name[month] + '_events.json', 'w')
 json.dump(collections.OrderedDict(sorted(all_events.items())), f)
-print 'Found {} events for month of {}'.format(len(all_events), calendar.month_name[month])
+print ('Found {} events for month of {}'.format(len(all_events), calendar.month_name[month]))
 
 f = open('output/' + calendar.month_name[month] + '_deaths.json', 'w')
 json.dump(collections.OrderedDict(sorted(all_deaths.items())), f)
-print 'Found {} deaths for month of {}'.format(len(all_deaths), calendar.month_name[month])
+print ('Found {} deaths for month of {}'.format(len(all_deaths), calendar.month_name[month]))
 
 f = open('output/' + calendar.month_name[month] + '_births.json', 'w')
 json.dump(collections.OrderedDict(sorted(all_births.items())), f)
-print 'Found {} births for month of {}'.format(len(all_births), calendar.month_name[month])
+print ('Found {} births for month of {}'.format(len(all_births), calendar.month_name[month]))
 
